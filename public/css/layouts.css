@@ -1,0 +1,317 @@
+/* ==========================================================================
+   Layouts & Grid Systems - Credit Assistant (India Edition)
+   ========================================================================== */
+
+.app-wrapper {
+  display: flex;
+  flex-direction: column;
+  min-height: 100vh;
+  position: relative;
+  z-index: 1;
+}
+
+/* Header Navbar */
+.navbar {
+  position: sticky;
+  top: 0;
+  z-index: 100;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 0.9rem 2.5rem;
+  background: rgba(7, 11, 20, 0.85);
+  backdrop-filter: blur(14px);
+  -webkit-backdrop-filter: blur(14px);
+  border-bottom: 1px solid var(--border-subtle);
+  gap: 1.5rem;
+}
+
+.brand-section {
+  display: flex;
+  align-items: center;
+  gap: 0.85rem;
+}
+
+.brand-logo-icon {
+  width: 38px;
+  height: 38px;
+  border-radius: var(--radius-md);
+  background: linear-gradient(135deg, #6366f1 0%, #10b981 100%);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: #fff;
+  font-weight: 800;
+  font-size: 1.25rem;
+  box-shadow: 0 0 16px rgba(99, 102, 241, 0.4);
+}
+
+.brand-text-container {
+  display: flex;
+  flex-direction: column;
+}
+
+.brand-title {
+  font-size: 1.25rem;
+  font-weight: 800;
+  letter-spacing: -0.02em;
+  display: flex;
+  align-items: center;
+  gap: 0.4rem;
+}
+
+.brand-badge {
+  font-size: 0.68rem;
+  padding: 0.15rem 0.45rem;
+  border-radius: var(--radius-sm);
+  background: rgba(99, 102, 241, 0.18);
+  color: var(--primary-light);
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+  border: 1px solid rgba(99, 102, 241, 0.3);
+}
+
+.brand-tagline {
+  font-size: 0.72rem;
+  color: var(--text-dim);
+}
+
+/* Nav Stats Bar */
+.nav-profile-summary {
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+  background: rgba(18, 28, 51, 0.6);
+  padding: 0.45rem 1rem;
+  border-radius: var(--radius-full);
+  border: 1px solid var(--border-subtle);
+}
+
+.nav-user-item {
+  display: flex;
+  flex-direction: column;
+  font-size: 0.78rem;
+}
+
+.nav-user-name {
+  font-weight: 700;
+  color: var(--text-main);
+}
+
+.nav-user-meta {
+  color: var(--text-muted);
+  font-size: 0.72rem;
+}
+
+.nav-divider {
+  width: 1px;
+  height: 24px;
+  background: var(--border-subtle);
+}
+
+.nav-actions {
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+}
+
+/* Secondary Sub-Navigation (Tabs) */
+.sub-nav-bar {
+  padding: 0.85rem 2.5rem;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.04);
+  background: rgba(13, 21, 39, 0.4);
+}
+
+/* Main Content Area */
+.main-container {
+  flex: 1;
+  max-width: 1440px;
+  width: 100%;
+  margin: 0 auto;
+  padding: 2rem 2.5rem 4rem 2.5rem;
+}
+
+/* View Sections */
+.view-section {
+  display: none;
+}
+
+.view-section.active {
+  display: block;
+  animation: fadeIn 0.35s ease;
+}
+
+/* Dashboard Grid Layout */
+.dashboard-grid {
+  display: grid;
+  grid-template-columns: 340px 1fr;
+  gap: 1.75rem;
+  margin-bottom: 1.75rem;
+}
+
+.score-hero-card {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  text-align: center;
+  padding: 1.75rem 1.5rem;
+  background: linear-gradient(180deg, rgba(24, 36, 66, 0.8) 0%, rgba(18, 28, 51, 0.9) 100%);
+  border: 1px solid rgba(99, 102, 241, 0.2);
+  border-radius: var(--radius-xl);
+  box-shadow: 0 8px 30px rgba(0, 0, 0, 0.4);
+}
+
+.key-stats-grid {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 1.25rem;
+  margin-bottom: 1.75rem;
+}
+
+.dashboard-middle-grid {
+  display: grid;
+  grid-template-columns: 2fr 1fr;
+  gap: 1.75rem;
+  margin-bottom: 1.75rem;
+}
+
+.chart-card-body {
+  height: 320px;
+  position: relative;
+  margin-top: 0.75rem;
+}
+
+/* Advisor 2-Column Layout */
+.advisor-layout-grid {
+  display: grid;
+  grid-template-columns: 1.35fr 1fr;
+  gap: 1.75rem;
+}
+
+/* Simulator Layout Grid */
+.simulator-layout-grid {
+  display: grid;
+  grid-template-columns: 1.2fr 1fr;
+  gap: 1.75rem;
+}
+
+/* Accounts Layout Grid */
+.accounts-layout-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 1.75rem;
+  margin-bottom: 1.75rem;
+}
+
+.account-item-card {
+  padding: 1.15rem 1.35rem;
+  border-radius: var(--radius-md);
+  background: var(--bg-surface);
+  border: 1px solid var(--border-subtle);
+  margin-bottom: 0.85rem;
+  transition: all var(--transition-normal);
+}
+
+.account-item-card:hover {
+  border-color: rgba(255, 255, 255, 0.15);
+}
+
+.account-top-row {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: 0.6rem;
+}
+
+.account-inst-name {
+  font-weight: 700;
+  font-size: 1rem;
+}
+
+.account-figures-row {
+  display: flex;
+  justify-content: space-between;
+  font-size: 0.85rem;
+  color: var(--text-muted);
+  margin-bottom: 0.6rem;
+}
+
+/* Dispute Grid */
+.dispute-grid {
+  display: grid;
+  grid-template-columns: 1fr 1.2fr;
+  gap: 1.75rem;
+}
+
+.dpd-legend-table {
+  width: 100%;
+  border-collapse: collapse;
+  font-size: 0.86rem;
+}
+
+.dpd-legend-table th, .dpd-legend-table td {
+  padding: 0.65rem 0.75rem;
+  border-bottom: 1px solid var(--border-subtle);
+  text-align: left;
+}
+
+.dpd-legend-table th {
+  color: var(--text-dim);
+  font-size: 0.75rem;
+  text-transform: uppercase;
+}
+
+/* Footer */
+.app-footer {
+  text-align: center;
+  padding: 2rem;
+  font-size: 0.8rem;
+  color: var(--text-dim);
+  border-top: 1px solid rgba(255, 255, 255, 0.04);
+}
+
+/* Responsive Media Queries */
+@media (max-width: 1200px) {
+  .key-stats-grid {
+    grid-template-columns: repeat(2, 1fr);
+  }
+  .dashboard-middle-grid {
+    grid-template-columns: 1fr;
+  }
+  .advisor-layout-grid, .simulator-layout-grid, .dispute-grid, .accounts-layout-grid {
+    grid-template-columns: 1fr;
+  }
+}
+
+@media (max-width: 900px) {
+  .navbar {
+    padding: 0.85rem 1.25rem;
+    flex-wrap: wrap;
+  }
+  .nav-profile-summary {
+    display: none;
+  }
+  .sub-nav-bar {
+    padding: 0.75rem 1.25rem;
+    overflow-x: auto;
+  }
+  .main-container {
+    padding: 1.25rem;
+  }
+  .dashboard-grid {
+    grid-template-columns: 1fr;
+  }
+}
+
+@media (max-width: 600px) {
+  .key-stats-grid {
+    grid-template-columns: 1fr;
+  }
+  .brand-tagline {
+    display: none;
+  }
+}

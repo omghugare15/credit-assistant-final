@@ -1,0 +1,984 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Credit Assistant — AI-Powered Credit Health Platform (India)</title>
+  <meta name="description" content="AI-driven financial platform empowering Indian borrowers to understand, track, and elevate their CIBIL credit score to 750+ Prime status with Google Gemini AI.">
+  <meta name="theme-color" content="#070b14">
+
+  <!-- Chart.js via CDN -->
+  <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+
+  <!-- Stylesheets -->
+  <link rel="stylesheet" href="/css/base.css">
+  <link rel="stylesheet" href="/css/components.css">
+  <link rel="stylesheet" href="/css/layouts.css">
+</head>
+<body>
+
+<div class="app-wrapper">
+  <!-- Top Navigation Bar -->
+  <header class="navbar" id="main-navbar">
+    <div class="brand-section">
+      <div class="brand-logo-icon">CA</div>
+      <div class="brand-text-container">
+        <div class="brand-title">
+          Credit Assistant
+          <span style="font-size: 1rem;">🇮🇳</span>
+          <span class="brand-badge">Gemini AI</span>
+        </div>
+        <div class="brand-tagline">Indian Credit Health & CIBIL Elevation Suite</div>
+      </div>
+    </div>
+
+    <!-- Active Profile Summary -->
+    <div class="nav-profile-summary" id="nav-profile-summary">
+      <div class="nav-user-item">
+        <span class="nav-user-name" id="nav-user-name">Rohan Sharma</span>
+        <span class="nav-user-meta" id="nav-user-city">Bengaluru, Karnataka • Salaried</span>
+      </div>
+      <div class="nav-divider"></div>
+      <span class="badge badge-amber" id="nav-score-badge">CIBIL 685</span>
+      <span class="badge badge-amber" id="nav-dti-badge">DTI: 41.5%</span>
+      <span class="badge badge-rose" id="nav-util-badge">Util: 54.2%</span>
+    </div>
+
+    <!-- Header Actions -->
+    <div class="nav-actions">
+      <button class="btn btn-primary btn-sm" id="btn-open-onboarding">
+        <span>+</span> New Assessment
+      </button>
+
+      <button class="btn btn-secondary btn-sm" id="btn-open-api-modal">
+        <span id="gemini-engine-badge" class="badge badge-primary" style="padding: 2px 6px;">Intelligent Engine</span>
+        ⚙️ Settings
+      </button>
+
+      <button class="btn btn-ghost btn-sm" id="btn-reset-demo" title="Reset to standard Indian benchmark profile">
+        ↺ Reset Demo
+      </button>
+    </div>
+  </header>
+
+  <!-- Secondary Tab Bar -->
+  <nav class="sub-nav-bar">
+    <div class="tab-container" role="tablist">
+      <button class="tab-btn active" data-tab="dashboard" role="tab" id="tab-btn-dashboard">
+        📊 Dashboard & Health
+      </button>
+      <button class="tab-btn" data-tab="advisor" role="tab" id="tab-btn-advisor">
+        🤖 Gemini AI Strategist
+      </button>
+      <button class="tab-btn" data-tab="simulator" role="tab" id="tab-btn-simulator">
+        🎚️ What-If Simulator
+      </button>
+      <button class="tab-btn" data-tab="accounts" role="tab" id="tab-btn-accounts">
+        💳 Accounts & Debt
+      </button>
+      <button class="tab-btn" data-tab="disputes" role="tab" id="tab-btn-disputes">
+        🛡️ Bureau Disputes & DPD
+      </button>
+    </div>
+  </nav>
+
+  <!-- Main Content Container -->
+  <main class="main-container">
+
+    <!-- ==========================================
+         VIEW 1: DASHBOARD
+         ========================================== -->
+    <section class="view-section active" id="view-dashboard">
+      
+      <!-- Top Alert Banner -->
+      <div id="dashboard-alert-banner" class="alert alert-amber animate-fade-in">
+        <div style="font-size: 1.4rem;">⚠️</div>
+        <div>
+          <b>Credit Utilization Alert (54.2%)</b><br>
+          Your credit card balances exceed the recommended 30% ratio. Paying down ₹58,000 can boost your score by up to +28 points!
+        </div>
+      </div>
+
+      <!-- Dashboard Hero & Key Stats -->
+      <div class="dashboard-grid">
+        <!-- Circular Score Gauge Card -->
+        <div class="score-hero-card">
+          <div style="font-size: 0.85rem; font-weight: 700; text-transform: uppercase; letter-spacing: 0.05em; color: var(--text-muted); margin-bottom: 0.5rem;">
+            TransUnion CIBIL Score
+          </div>
+
+          <!-- SVG Radial Arc Gauge -->
+          <div class="gauge-wrapper">
+            <div class="gauge-svg-container">
+              <svg class="gauge-svg" viewBox="0 0 250 140">
+                <!-- Background Arc -->
+                <path class="gauge-track" d="M 30,130 A 95,95 0 0,1 220,130" />
+                <!-- Dynamic Fill Arc -->
+                <path id="gauge-fill-path" class="gauge-fill" d="M 30,130 A 95,95 0 0,1 220,130" style="stroke: #f59e0b;" />
+              </svg>
+              <!-- Score Number Center -->
+              <div class="gauge-center-text">
+                <div class="gauge-score-num" id="gauge-score-value">685</div>
+                <div id="gauge-tier-badge" class="badge badge-amber" style="margin-top: -4px;">Fair / Average</div>
+              </div>
+            </div>
+            <div class="gauge-scale-limits">
+              <span>300 (Poor)</span>
+              <span>750 (Prime)</span>
+              <span>900 (Max)</span>
+            </div>
+          </div>
+
+          <div id="gauge-target-info" style="font-size: 0.82rem; color: var(--text-muted); margin-top: 0.75rem;">
+            <span class="text-amber">▲ 105 points</span> needed to achieve Prime status (<b>790</b>)
+          </div>
+        </div>
+
+        <!-- 4 Key Financial Metrics Grid -->
+        <div class="key-stats-grid">
+          <!-- Stat 1: DTI -->
+          <div class="stat-card">
+            <div class="stat-header">
+              <span class="stat-label">Debt-to-Income (DTI)</span>
+              <span id="stat-dti-badge" class="badge badge-amber">Moderate</span>
+            </div>
+            <div class="stat-value text-amber" id="stat-dti-val">41.5%</div>
+            <div class="stat-footer">
+              <span id="stat-dti-sub">₹39,500 of ₹95,000 / mo</span>
+              <span class="text-dim">RBI ceiling ~50%</span>
+            </div>
+          </div>
+
+          <!-- Stat 2: Utilization -->
+          <div class="stat-card">
+            <div class="stat-header">
+              <span class="stat-label">Card Utilization</span>
+              <span id="stat-util-badge" class="badge badge-rose">Caution (>30%)</span>
+            </div>
+            <div class="stat-value text-rose" id="stat-util-val">54.2%</div>
+            <div class="stat-footer">
+              <span id="stat-util-sub">₹1,30,000 / ₹2,40,000</span>
+              <span class="text-emerald">Optimal: &lt;30%</span>
+            </div>
+          </div>
+
+          <!-- Stat 3: Monthly EMI Outflow -->
+          <div class="stat-card">
+            <div class="stat-header">
+              <span class="stat-label">Monthly EMI Outflow</span>
+              <span class="badge badge-primary">Active Obligations</span>
+            </div>
+            <div class="stat-value" id="stat-emi-val">₹46,000</div>
+            <div class="stat-footer">
+              <span id="stat-emi-sub">Across 5 credit lines</span>
+              <span class="text-dim">NACH Debits</span>
+            </div>
+          </div>
+
+          <!-- Stat 4: Total Debt -->
+          <div class="stat-card">
+            <div class="stat-header">
+              <span class="stat-label">Total Outstanding Debt</span>
+              <span class="badge badge-neutral">All Liabilities</span>
+            </div>
+            <div class="stat-value text-cyan" id="stat-debt-val">₹32,91,000</div>
+            <div class="stat-footer">
+              <span id="stat-debt-sub">Secured: ₹28.2L | Unsecured: ₹4.7L</span>
+              <span class="text-dim">CIBIL Mix</span>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Charts & Factor Diagnostic Grid -->
+      <div class="dashboard-middle-grid">
+        <!-- 12-Month Score Trend Line Chart -->
+        <div class="card">
+          <div class="card-header">
+            <div>
+              <div class="card-title">
+                <span>📈</span> Credit Score Trajectory & AI Projections
+              </div>
+              <div class="card-subtitle">
+                Historical monthly check-ins vs. projected curve to 750+ with disciplined repayments
+              </div>
+            </div>
+          </div>
+          <div class="chart-card-body">
+            <canvas id="scoreHistoryChart"></canvas>
+          </div>
+        </div>
+
+        <!-- 5 Pillars of CIBIL Diagnostic -->
+        <div class="card">
+          <div class="card-header">
+            <div>
+              <div class="card-title">
+                <span>🎯</span> CIBIL 5 Pillars Diagnostic
+              </div>
+              <div class="card-subtitle">
+                Scoring algorithm weightage & health status
+              </div>
+            </div>
+          </div>
+          <div id="cibil-pillars-container">
+            <!-- Populated dynamically by dashboard.js -->
+          </div>
+        </div>
+      </div>
+
+      <!-- Bottom Row: Debt Donut & Quick Shortcuts -->
+      <div class="dashboard-middle-grid">
+        <div class="card">
+          <div class="card-header">
+            <div>
+              <div class="card-title">
+                <span>🍩</span> Debt Portfolio Allocation
+              </div>
+              <div class="card-subtitle">
+                Secured vs. Unsecured credit distribution (₹ INR)
+              </div>
+            </div>
+          </div>
+          <div style="height: 220px; position: relative;">
+            <canvas id="debtDonutChart"></canvas>
+          </div>
+        </div>
+
+        <div class="card" style="display: flex; flex-direction: column; justify-content: space-between;">
+          <div>
+            <div class="card-title" style="margin-bottom: 0.5rem;">
+              <span>⚡</span> Fast-Track Credit Actions
+            </div>
+            <p style="font-size: 0.85rem; margin-bottom: 1rem;">
+              Direct access to tools for immediate score recovery and bureau optimization.
+            </p>
+            <div style="display: flex; flex-direction: column; gap: 0.65rem;">
+              <button class="btn btn-secondary" onclick="document.getElementById('tab-btn-simulator').click();" style="justify-content: flex-start;">
+                🎚️ Test "What-If" Debt Repayment in Simulator
+              </button>
+              <button class="btn btn-secondary" onclick="document.getElementById('tab-btn-advisor').click();" style="justify-content: flex-start;">
+                🤖 Ask Aarav for a 90-Day CIBIL Surge Roadmap
+              </button>
+              <button class="btn btn-secondary" onclick="document.getElementById('tab-btn-disputes').click();" style="justify-content: flex-start;">
+                🛡️ Draft Legal Notice for Axis Bank 30-Day DPD
+              </button>
+            </div>
+          </div>
+          <div style="font-size: 0.75rem; color: var(--text-dim); margin-top: 1rem;">
+            🔒 Data is stored securely in your local environment. Compliant with RBI CICRA standards.
+          </div>
+        </div>
+      </div>
+
+    </section>
+
+    <!-- ==========================================
+         VIEW 2: GEMINI AI FINANCIAL STRATEGIST
+         ========================================== -->
+    <section class="view-section" id="view-advisor">
+      <div class="advisor-layout-grid">
+        
+        <!-- Left: Interactive Chat with Aarav -->
+        <div class="card" style="padding: 0; display: flex; flex-direction: column; height: 680px;">
+          <div class="chat-header">
+            <div style="display: flex; align-items: center; gap: 0.75rem;">
+              <div style="width: 38px; height: 38px; border-radius: 50%; background: linear-gradient(135deg, #6366f1 0%, #10b981 100%); display: flex; align-items: center; justify-content: center; font-size: 1.1rem;">
+                🤖
+              </div>
+              <div>
+                <div style="font-weight: 700; font-size: 0.98rem; display: flex; align-items: center; gap: 0.4rem;">
+                  Aarav — Senior Credit Strategist
+                  <span class="badge badge-emerald" style="padding: 1px 6px; font-size: 0.7rem;">Gemini AI</span>
+                </div>
+                <div style="font-size: 0.75rem; color: var(--text-dim);">
+                  Trained on RBI Lending Norms & TransUnion CIBIL Algorithms
+                </div>
+              </div>
+            </div>
+            <button class="btn btn-ghost btn-sm" id="chat-clear-btn" title="Clear chat history">
+              Clear Chat
+            </button>
+          </div>
+
+          <!-- Chat Messages Scroll Area -->
+          <div class="chat-messages" id="chat-messages-container">
+            <!-- Messages populated by advisor.js -->
+          </div>
+
+          <!-- Quick Action Prompts -->
+          <div class="chat-quick-chips">
+            <span class="quick-chip" data-prompt="How do I boost my score from 685 to 750+ in 90 days?">⚡ Reach 750 in 90 Days</span>
+            <span class="quick-chip" data-prompt="My credit card utilization is 54.2%. What is the optimal payoff schedule?">💳 Optimize 54% Utilization</span>
+            <span class="quick-chip" data-prompt="Should I pre-pay my Axis personal loan or clear my HDFC credit card first?">⚖️ Personal Loan vs Card Payoff</span>
+            <span class="quick-chip" data-prompt="How do I remove the 30-day DPD remark from my Axis Bank loan on CIBIL?">🛡️ Dispute CIBIL 30-Day DPD</span>
+            <span class="quick-chip" data-prompt="Will closing my oldest credit card damage my credit age?">⏳ Old Card Closure Impact</span>
+          </div>
+
+          <!-- Input Bar -->
+          <div class="chat-input-bar">
+            <input type="text" class="chat-input" id="chat-input-text" placeholder="Ask Aarav anything about your credit score, EMIs, or dispute procedures..." autocomplete="off">
+            <button class="btn btn-primary" id="chat-send-btn">
+              Send
+            </button>
+          </div>
+        </div>
+
+        <!-- Right: Action Plan Roadmap Checklist -->
+        <div class="card" style="display: flex; flex-direction: column; height: 680px;">
+          <div class="card-header" style="margin-bottom: 0.75rem;">
+            <div>
+              <div class="card-title">
+                <span>🎯</span> AI Action Plan Roadmap
+              </div>
+              <div class="card-subtitle">
+                Check off items to log progress and increase your score!
+              </div>
+            </div>
+            <button class="btn btn-emerald btn-sm" id="btn-generate-ai-plan">
+              ✨ Generate AI Plan
+            </button>
+          </div>
+
+          <!-- Progress summary -->
+          <div style="display: flex; justify-content: space-between; align-items: center; padding: 0.6rem 0.9rem; background: rgba(99, 102, 241, 0.08); border-radius: var(--radius-md); margin-bottom: 1rem; border: 1px solid rgba(99, 102, 241, 0.2);">
+            <span id="action-plans-progress" style="font-size: 0.85rem; font-weight: 600; color: var(--primary-light);">
+              0 of 4 Completed
+            </span>
+            <span id="action-points-earned" class="badge badge-emerald" style="font-weight: 700;">
+              +0 pts Earned
+            </span>
+          </div>
+
+          <!-- List of actions -->
+          <div style="flex: 1; overflow-y: auto; padding-right: 0.25rem;" id="action-plans-list">
+            <!-- Populated dynamically by advisor.js -->
+          </div>
+        </div>
+
+      </div>
+    </section>
+
+    <!-- ==========================================
+         VIEW 3: WHAT-IF CREDIT SCORE SIMULATOR
+         ========================================== -->
+    <section class="view-section" id="view-simulator">
+      <div class="simulator-layout-grid">
+        
+        <!-- Left: Interactive Scenario Controls -->
+        <div class="card">
+          <div class="card-header">
+            <div>
+              <div class="card-title">
+                <span>🎚️</span> Credit Simulation Sandbox
+              </div>
+              <div class="card-subtitle">
+                Model real-world financial actions and preview their CIBIL score consequence
+              </div>
+            </div>
+            <button class="btn btn-ghost btn-sm" id="sim-reset-btn">
+              Reset Sliders
+            </button>
+          </div>
+
+          <!-- Control 1: Pay down credit card debt -->
+          <div class="slider-control-group">
+            <div class="slider-label-row">
+              <span class="slider-name">💳 Pay Down Credit Card Debt</span>
+              <span class="slider-val-badge" id="sim-pay-val">₹0</span>
+            </div>
+            <input type="range" class="range-slider" id="sim-pay-slider" min="0" max="130000" step="5000" value="0">
+            <div style="display: flex; justify-content: space-between; font-size: 0.75rem; color: var(--text-dim); margin-top: 0.35rem;">
+              <span>₹0</span>
+              <span id="sim-pay-max-label">₹1,30,000</span>
+            </div>
+            <!-- Quick Paydown Chips -->
+            <div style="display: flex; gap: 0.4rem; margin-top: 0.5rem;">
+              <button class="btn btn-secondary btn-sm sim-quick-pay" data-amt="25000">₹25,000</button>
+              <button class="btn btn-secondary btn-sm sim-quick-pay" data-amt="58000">₹58,000 (30% Goal)</button>
+              <button class="btn btn-secondary btn-sm sim-quick-pay" data-amt="95000">₹95,000 (15% Prime)</button>
+              <button class="btn btn-secondary btn-sm sim-quick-pay" data-amt="130000">Full Payoff</button>
+            </div>
+          </div>
+
+          <!-- Control 2: Credit Card Limit Enhancement -->
+          <div class="slider-control-group">
+            <div class="slider-label-row">
+              <span class="slider-name">📈 Request Credit Limit Increase</span>
+              <span class="slider-val-badge" id="sim-limit-val">+0%</span>
+            </div>
+            <input type="range" class="range-slider" id="sim-limit-slider" min="0" max="100" step="10" value="0">
+            <div style="display: flex; justify-content: space-between; font-size: 0.75rem; color: var(--text-dim); margin-top: 0.35rem;">
+              <span>Existing Limit</span>
+              <span>+50% Enhancement</span>
+              <span>+100% (2x Limit)</span>
+            </div>
+          </div>
+
+          <!-- Control 3: Close / Pay Off Loan -->
+          <div class="form-group" style="margin-bottom: 1.4rem;">
+            <label class="form-label">🏦 Pay Off & Close Active Loan Account</label>
+            <select class="form-select" id="sim-close-loan-select">
+              <option value="">None (Keep existing loan accounts)</option>
+            </select>
+          </div>
+
+          <!-- Control 4: Missed Payment Warning Simulation -->
+          <div class="form-group" style="margin-bottom: 1.4rem;">
+            <label class="form-label" style="color: var(--rose-light);">⚠️ Simulate Missed Payment (Risk Stress Test)</label>
+            <select class="form-select" id="sim-miss-select">
+              <option value="0">0 Missed Payments (100% on time)</option>
+              <option value="1">1 Missed Payment (30-day DPD reported)</option>
+              <option value="2">2 Consecutive Missed Payments (60-day DPD)</option>
+            </select>
+          </div>
+
+          <!-- Control 5: New Hard Inquiries -->
+          <div class="slider-control-group">
+            <div class="slider-label-row">
+              <span class="slider-name">🔍 New Loan/Card Applications (Hard Inquiries)</span>
+              <span class="slider-val-badge" id="sim-inquiry-val">0 inquiries</span>
+            </div>
+            <input type="range" class="range-slider" id="sim-inquiry-slider" min="0" max="4" step="1" value="0">
+          </div>
+
+          <!-- Control 6: Consecutive On-Time Streak -->
+          <div class="slider-control-group">
+            <div class="slider-label-row">
+              <span class="slider-name">⏳ Maintain Consecutive Flawless Payments</span>
+              <span class="slider-val-badge" id="sim-ontime-val">0 months</span>
+            </div>
+            <input type="range" class="range-slider" id="sim-ontime-slider" min="0" max="12" step="3" value="0">
+          </div>
+
+        </div>
+
+        <!-- Right: Real-Time Score Delta & AI Commentary -->
+        <div class="card" style="display: flex; flex-direction: column;">
+          <div class="card-header">
+            <div>
+              <div class="card-title">
+                <span>🔮</span> Simulated Score Outcome
+              </div>
+              <div class="card-subtitle">
+                Projected CIBIL response under the simulated conditions
+              </div>
+            </div>
+            <span id="sim-delta-badge" class="badge badge-neutral" style="font-size: 0.95rem; padding: 0.4rem 0.8rem;">
+              +0 Points
+            </span>
+          </div>
+
+          <!-- Before / After Score Visualizer -->
+          <div style="display: flex; align-items: center; justify-content: space-around; padding: 1.5rem 1rem; background: var(--bg-surface-elevated); border-radius: var(--radius-lg); margin-bottom: 1.25rem;">
+            <div style="text-align: center;">
+              <div class="text-dim" style="font-size: 0.75rem; text-transform: uppercase; font-weight: 700;">Current Score</div>
+              <div id="sim-cur-score" style="font-family: var(--font-display); font-size: 2.8rem; font-weight: 800; color: #94a3b8;">685</div>
+              <div class="badge badge-amber">Fair</div>
+            </div>
+
+            <div style="font-size: 2rem; color: var(--primary-light);">➔</div>
+
+            <div style="text-align: center;">
+              <div class="text-dim" style="font-size: 0.75rem; text-transform: uppercase; font-weight: 700;">Simulated Score</div>
+              <div id="sim-result-score" style="font-family: var(--font-display); font-size: 3.2rem; font-weight: 800; color: #fff;">685</div>
+              <div class="badge badge-emerald">Projected</div>
+            </div>
+          </div>
+
+          <!-- Secondary Metrics Shift -->
+          <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 1rem; margin-bottom: 1.25rem;">
+            <div style="padding: 0.9rem; background: rgba(255, 255, 255, 0.03); border-radius: var(--radius-md); border: 1px solid var(--border-subtle);">
+              <span class="text-dim" style="font-size: 0.75rem; font-weight: 600;">NEW UTILIZATION</span>
+              <div id="sim-new-util" class="tabular-nums" style="font-size: 1.35rem; font-weight: 700; margin-top: 0.2rem;">54.2%</div>
+            </div>
+            <div style="padding: 0.9rem; background: rgba(255, 255, 255, 0.03); border-radius: var(--radius-md); border: 1px solid var(--border-subtle);">
+              <span class="text-dim" style="font-size: 0.75rem; font-weight: 600;">NEW DTI RATIO</span>
+              <div id="sim-new-dti" class="tabular-nums" style="font-size: 1.35rem; font-weight: 700; margin-top: 0.2rem;">41.5%</div>
+            </div>
+          </div>
+
+          <!-- Factor Breakdown -->
+          <div style="margin-bottom: 1.25rem;">
+            <div class="text-dim" style="font-size: 0.78rem; text-transform: uppercase; font-weight: 700; margin-bottom: 0.5rem;">
+              Algorithm Factor Movements:
+            </div>
+            <div id="sim-factors-list">
+              <!-- Populated dynamically -->
+            </div>
+          </div>
+
+          <!-- Gemini Narrative Explanation -->
+          <div style="flex: 1; padding: 1rem; background: rgba(99, 102, 241, 0.06); border: 1px solid rgba(99, 102, 241, 0.2); border-radius: var(--radius-md);">
+            <div style="font-size: 0.8rem; font-weight: 700; color: var(--primary-light); margin-bottom: 0.4rem; display: flex; align-items: center; gap: 0.4rem;">
+              <span>🤖</span> Gemini AI Strategy Breakdown
+            </div>
+            <div id="sim-narrative-text" style="font-size: 0.88rem; color: var(--text-main); line-height: 1.55;">
+              Move the sliders to model actions.
+            </div>
+          </div>
+
+        </div>
+
+      </div>
+    </section>
+
+    <!-- ==========================================
+         VIEW 4: ACCOUNTS & DEBT STRATEGIST
+         ========================================== -->
+    <section class="view-section" id="view-accounts">
+      <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 1.5rem;">
+        <div>
+          <h2>Credit Accounts & Debt Payoff Strategist</h2>
+          <p>Track card limits, monitor loan amortizations, and accelerate debt-free freedom.</p>
+        </div>
+        <button class="btn btn-primary" id="btn-open-add-account">
+          + Add Account / Loan
+        </button>
+      </div>
+
+      <div class="accounts-layout-grid">
+        
+        <!-- Left Column: Active Accounts -->
+        <div>
+          <!-- Cards -->
+          <div class="card" style="margin-bottom: 1.75rem;">
+            <div class="card-header">
+              <div class="card-title">
+                <span>💳</span> Credit Cards & Revolving Lines
+              </div>
+            </div>
+            <div id="cards-list-container">
+              <!-- Populated by accounts.js -->
+            </div>
+          </div>
+
+          <!-- Loans -->
+          <div class="card">
+            <div class="card-header">
+              <div class="card-title">
+                <span>🏦</span> Active Term Loans & Mortgages
+              </div>
+            </div>
+            <div id="loans-list-container">
+              <!-- Populated by accounts.js -->
+            </div>
+          </div>
+        </div>
+
+        <!-- Right Column: Avalanche vs Snowball Calculator -->
+        <div class="card">
+          <div class="card-header">
+            <div>
+              <div class="card-title">
+                <span>⚡</span> Debt Avalanche vs. Debt Snowball
+              </div>
+              <div class="card-subtitle">
+                Two proven frameworks for clearing debt and skyrocketing CIBIL scores
+              </div>
+            </div>
+          </div>
+
+          <!-- Avalanche Highlight Box -->
+          <div style="padding: 1.25rem; background: rgba(16, 185, 129, 0.08); border: 1px solid rgba(16, 185, 129, 0.25); border-radius: var(--radius-md); margin-bottom: 1.5rem;">
+            <div style="display: flex; justify-content: space-between; align-items: center;">
+              <div>
+                <b style="color: var(--emerald-light); font-size: 1rem;">Debt Avalanche (Mathematically Optimal)</b>
+                <div class="text-muted" style="font-size: 0.8rem; margin-top: 0.2rem;">
+                  Targets highest APR debt first. Eliminates 40%+ card compounding interest.
+                </div>
+              </div>
+              <div style="text-align: right;">
+                <div class="text-dim" style="font-size: 0.75rem;">EST. ANNUAL SAVINGS</div>
+                <div id="avalanche-interest-saved" style="font-family: var(--font-display); font-size: 1.5rem; font-weight: 800; color: #fff;">₹52,000</div>
+              </div>
+            </div>
+          </div>
+
+          <!-- Avalanche Order -->
+          <div style="margin-bottom: 1.5rem;">
+            <div class="text-dim" style="font-size: 0.78rem; text-transform: uppercase; font-weight: 700; margin-bottom: 0.5rem;">
+              Avalanche Repayment Sequence (Highest APR first):
+            </div>
+            <div id="avalanche-priority-list">
+              <!-- Populated by accounts.js -->
+            </div>
+          </div>
+
+          <!-- Snowball Order -->
+          <div>
+            <div class="text-dim" style="font-size: 0.78rem; text-transform: uppercase; font-weight: 700; margin-bottom: 0.5rem;">
+              Snowball Repayment Sequence (Lowest balance first for psychological momentum):
+            </div>
+            <div id="snowball-priority-list">
+              <!-- Populated by accounts.js -->
+            </div>
+          </div>
+
+        </div>
+
+      </div>
+    </section>
+
+    <!-- ==========================================
+         VIEW 5: BUREAU DISPUTES & DPD GUIDE
+         ========================================== -->
+    <section class="view-section" id="view-disputes">
+      <div style="margin-bottom: 1.5rem;">
+        <h2>Indian Credit Bureau Dispute & DPD Hub</h2>
+        <p>Understanding CIBIL Days Past Due (DPD) codes, legal rights under RBI CICRA 2005, and dispute letter generation.</p>
+      </div>
+
+      <div class="dispute-grid">
+        
+        <!-- Left: DPD Decoder & RBI Guidelines -->
+        <div class="card">
+          <div class="card-header">
+            <div class="card-title">
+              <span>📖</span> CIBIL DPD (Days Past Due) Decoder
+            </div>
+          </div>
+
+          <table class="dpd-legend-table">
+            <thead>
+              <tr>
+                <th>Code</th>
+                <th>Classification</th>
+                <th>CIBIL Impact</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td><b class="text-emerald">000</b></td>
+                <td>Payment On Time (Standard)</td>
+                <td><span class="badge badge-emerald">Optimal</span></td>
+              </tr>
+              <tr>
+                <td><b class="text-amber">030</b></td>
+                <td>30 Days Overdue</td>
+                <td><span class="badge badge-amber">-40 to -60 pts</span></td>
+              </tr>
+              <tr>
+                <td><b class="text-rose">060 - 090</b></td>
+                <td>60 to 90 Days Overdue</td>
+                <td><span class="badge badge-rose">Severe Crash</span></td>
+              </tr>
+              <tr>
+                <td><b class="text-rose">SMA</b></td>
+                <td>Special Mention Account</td>
+                <td><span class="badge badge-rose">High Default Risk</span></td>
+              </tr>
+              <tr>
+                <td><b class="text-rose">SUB / DBT</b></td>
+                <td>Sub-Standard / Doubtful Asset</td>
+                <td><span class="badge badge-rose">NPA Class</span></td>
+              </tr>
+              <tr>
+                <td><b class="text-rose">WRT / SET</b></td>
+                <td>Written Off / Settled</td>
+                <td><span class="badge badge-rose">Loan Blocked</span></td>
+              </tr>
+            </tbody>
+          </table>
+
+          <div style="margin-top: 1.5rem; padding: 1rem; background: rgba(99, 102, 241, 0.08); border-radius: var(--radius-md); border: 1px solid rgba(99, 102, 241, 0.2);">
+            <b style="color: var(--primary-light); font-size: 0.88rem;">⚖️ Your Statutory Rights under RBI:</b>
+            <p style="font-size: 0.82rem; margin-top: 0.35rem; color: var(--text-main);">
+              Under the Credit Information Companies (Regulation) Act, 2005 (CICRA), Indian credit bureaus (CIBIL, Experian) and banks must resolve credit report disputes within <b>30 days</b>. Failing this, the borrower can escalate directly to the <b>RBI Banking Ombudsman</b>.
+            </p>
+          </div>
+        </div>
+
+        <!-- Right: Interactive Dispute Letter Generator -->
+        <div class="card">
+          <div class="card-header">
+            <div>
+              <div class="card-title">
+                <span>📝</span> Statutory Dispute Letter Generator
+              </div>
+              <div class="card-subtitle">
+                Generate a formal notice per Section 21 of CICRA 2005 to submit to CIBIL & Lenders
+              </div>
+            </div>
+          </div>
+
+          <div class="form-row">
+            <div class="form-group">
+              <label class="form-label">Disputed Account</label>
+              <select class="form-select" id="dispute-account-select">
+                <!-- Populated dynamically -->
+              </select>
+            </div>
+            <div class="form-group">
+              <label class="form-label">Type of Error</label>
+              <select class="form-select" id="dispute-error-type">
+                <option value="incorrect_dpd">Incorrect DPD (Paid on time, marked overdue)</option>
+                <option value="account_still_open">Closed Loan still showing as "Active/Open"</option>
+                <option value="unauthorized_inquiry">Unauthorized / Fraudulent Hard Inquiry</option>
+                <option value="balance_mismatch">Balance Mismatch after pre-payment</option>
+              </select>
+            </div>
+          </div>
+
+          <div class="form-row">
+            <div class="form-group">
+              <label class="form-label">Report Control Number (ECN)</label>
+              <input type="text" class="form-input" id="dispute-ecn-input" placeholder="e.g. 982143091 (Found on CIBIL CIR)">
+            </div>
+            <div class="form-group">
+              <label class="form-label">Additional Observation / Reference</label>
+              <input type="text" class="form-input" id="dispute-notes-input" placeholder="e.g. Paid via NEFT on 12th Aug, UTR: AXIS09812">
+            </div>
+          </div>
+
+          <button class="btn btn-primary" id="btn-generate-dispute" style="width: 100%; margin-top: 0.5rem;">
+            Generate Legal Dispute Draft
+          </button>
+
+          <!-- Generated Letter Container -->
+          <div id="dispute-result-box" style="display: none; margin-top: 1.5rem;">
+            <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 0.5rem;">
+              <b style="font-size: 0.88rem; color: #fff;">Formatted Notice Draft:</b>
+              <button class="btn btn-emerald btn-sm" id="btn-copy-dispute">
+                📋 Copy Letter
+              </button>
+            </div>
+            <textarea class="form-input" id="dispute-letter-output" rows="11" style="font-family: var(--font-mono); font-size: 0.8rem; line-height: 1.5; color: #cbd5e1;" readonly></textarea>
+          </div>
+
+        </div>
+
+      </div>
+    </section>
+
+  </main>
+
+  <!-- App Footer -->
+  <footer class="app-footer">
+    Credit Assistant India • Powered by Google Gemini AI • Architecture for Indian Financial Underwriting
+  </footer>
+</div>
+
+<!-- ==========================================
+     MODAL 1: GUIDED ONBOARDING & ASSESSMENT
+     ========================================== -->
+<div class="modal-overlay" id="modal-onboarding">
+  <div class="modal-box">
+    <div class="modal-header">
+      <div>
+        <div class="modal-title">Credit Assessment Wizard</div>
+        <div class="text-dim" style="font-size: 0.8rem;" id="onboard-step-indicator">Step 1 of 3</div>
+      </div>
+      <button class="btn btn-ghost btn-sm" id="btn-close-onboarding">✕</button>
+    </div>
+
+    <form id="form-onboarding" onsubmit="return false;">
+      <!-- Step 1: Personal & Income -->
+      <div id="onboard-step-1">
+        <h4 style="margin-bottom: 1rem; color: var(--primary-light);">1. Personal & Net In-Hand Income</h4>
+        <div class="form-row">
+          <div class="form-group">
+            <label class="form-label">Full Name</label>
+            <input type="text" class="form-input" id="onboard-name" value="Priya Nair" required>
+          </div>
+          <div class="form-group">
+            <label class="form-label">City & State</label>
+            <input type="text" class="form-input" id="onboard-city" value="Mumbai, Maharashtra">
+          </div>
+        </div>
+
+        <div class="form-row">
+          <div class="form-group">
+            <label class="form-label">Monthly In-Hand Net Salary (₹)</label>
+            <input type="number" class="form-input" id="onboard-income" value="110000" required>
+          </div>
+          <div class="form-group">
+            <label class="form-label">Employment Type</label>
+            <select class="form-select" id="onboard-employment">
+              <option value="Salaried (MNC/Corporate)">Salaried (MNC/Corporate)</option>
+              <option value="Salaried (Govt/PSU)">Salaried (Govt/PSU)</option>
+              <option value="Self-Employed Professional">Self-Employed Professional</option>
+              <option value="Business Owner">Business Owner</option>
+            </select>
+          </div>
+        </div>
+      </div>
+
+      <!-- Step 2: Score & Target -->
+      <div id="onboard-step-2" style="display: none;">
+        <h4 style="margin-bottom: 1rem; color: var(--primary-light);">2. Bureau & Credit Score Baseline</h4>
+        <div class="form-row">
+          <div class="form-group">
+            <label class="form-label">Current Credit Score (300-900)</label>
+            <input type="number" class="form-input" id="onboard-score" value="692" min="300" max="900" required>
+          </div>
+          <div class="form-group">
+            <label class="form-label">Reporting Bureau</label>
+            <select class="form-select" id="onboard-bureau">
+              <option value="CIBIL">TransUnion CIBIL</option>
+              <option value="Experian">Experian India</option>
+              <option value="CRIF">CRIF High Mark</option>
+              <option value="Equifax">Equifax India</option>
+            </select>
+          </div>
+        </div>
+        <div class="form-group">
+          <label class="form-label">Target Score</label>
+          <input type="number" class="form-input" id="onboard-target-score" value="800" min="700" max="900">
+        </div>
+      </div>
+
+      <!-- Step 3: Credit Cards & Outstanding -->
+      <div id="onboard-step-3" style="display: none;">
+        <h4 style="margin-bottom: 1rem; color: var(--primary-light);">3. Credit Cards & Active Debts</h4>
+        <div class="form-row">
+          <div class="form-group">
+            <label class="form-label">Total Credit Card Limit (₹)</label>
+            <input type="number" class="form-input" id="onboard-card1-limit" value="200000">
+          </div>
+          <div class="form-group">
+            <label class="form-label">Current Card Outstanding (₹)</label>
+            <input type="number" class="form-input" id="onboard-card1-bal" value="45000">
+          </div>
+        </div>
+        <div class="form-row">
+          <div class="form-group">
+            <label class="form-label">Existing Loan Balance (₹)</label>
+            <input type="number" class="form-input" id="onboard-loan-bal" value="180000">
+          </div>
+          <div class="form-group">
+            <label class="form-label">Monthly Loan EMI (₹)</label>
+            <input type="number" class="form-input" id="onboard-loan-emi" value="8500">
+          </div>
+        </div>
+      </div>
+
+      <!-- Modal Footer -->
+      <div style="display: flex; justify-content: space-between; margin-top: 1.75rem; border-top: 1px solid var(--border-subtle); padding-top: 1rem;">
+        <button class="btn btn-secondary" id="btn-onboard-prev" style="visibility: hidden;">
+          ← Back
+        </button>
+        <button class="btn btn-primary" id="btn-onboard-next">
+          Next Step →
+        </button>
+      </div>
+    </form>
+  </div>
+</div>
+
+<!-- ==========================================
+     MODAL 2: ADD ACCOUNT
+     ========================================== -->
+<div class="modal-overlay" id="modal-add-account">
+  <div class="modal-box">
+    <div class="modal-header">
+      <div class="modal-title">Add New Credit Line / Loan</div>
+      <button class="btn btn-ghost btn-sm" id="btn-close-account-modal">✕</button>
+    </div>
+
+    <form id="form-add-account">
+      <div class="form-row">
+        <div class="form-group">
+          <label class="form-label">Account Type</label>
+          <select class="form-select" id="acc-type-select">
+            <option value="CREDIT_CARD">Credit Card</option>
+            <option value="PERSONAL_LOAN">Personal Loan</option>
+            <option value="AUTO_LOAN">Auto / Two-Wheeler Loan</option>
+            <option value="HOME_LOAN">Home Loan</option>
+            <option value="BNPL">Buy Now Pay Later (BNPL)</option>
+          </select>
+        </div>
+        <div class="form-group">
+          <label class="form-label">Lending Institution Name</label>
+          <input type="text" class="form-input" id="acc-name-input" placeholder="e.g. SBI, HDFC, Axis, ICICI" required>
+        </div>
+      </div>
+
+      <div class="form-row">
+        <div class="form-group">
+          <label class="form-label" id="acc-limit-label">Sanctioned Credit Limit (₹)</label>
+          <input type="number" class="form-input" id="acc-limit-input" value="100000" required>
+        </div>
+        <div class="form-group">
+          <label class="form-label">Current Outstanding Balance (₹)</label>
+          <input type="number" class="form-input" id="acc-bal-input" value="25000" required>
+        </div>
+      </div>
+
+      <div class="form-row">
+        <div class="form-group">
+          <label class="form-label" id="acc-emi-label">Minimum Amount Due (₹)</label>
+          <input type="number" class="form-input" id="acc-emi-input" value="1500" required>
+        </div>
+        <div class="form-group">
+          <label class="form-label">Annual Interest Rate (% APR)</label>
+          <input type="number" class="form-input" id="acc-rate-input" value="40" step="0.5">
+        </div>
+      </div>
+
+      <div class="form-row">
+        <div class="form-group">
+          <label class="form-label">Last 4 Digits</label>
+          <input type="text" class="form-input" id="acc-last4-input" value="5521" maxlength="4">
+        </div>
+        <div class="form-group" style="display: flex; align-items: center; gap: 0.5rem; margin-top: 1.5rem;">
+          <input type="checkbox" id="acc-secured-check" style="width: 18px; height: 18px;">
+          <label for="acc-secured-check" style="font-size: 0.85rem; color: var(--text-main); cursor: pointer;">
+            Secured Asset (Backed by Collateral / FD)
+          </label>
+        </div>
+      </div>
+
+      <div style="display: flex; justify-content: flex-end; gap: 0.75rem; margin-top: 1rem;">
+        <button type="submit" class="btn btn-primary" style="width: 100%;">
+          Save Account to Profile
+        </button>
+      </div>
+    </form>
+  </div>
+</div>
+
+<!-- ==========================================
+     MODAL 3: GEMINI API KEY & ENGINE SETTINGS
+     ========================================== -->
+<div class="modal-overlay" id="modal-api-settings">
+  <div class="modal-box">
+    <div class="modal-header">
+      <div class="modal-title">AI Engine Settings</div>
+      <button class="btn btn-ghost btn-sm" id="btn-close-api-modal">✕</button>
+    </div>
+
+    <p style="font-size: 0.88rem; margin-bottom: 1.25rem;">
+      Credit Assistant works with a built-in intelligent Indian Credit Strategy Engine out-of-the-box. You can also connect your own Google Gemini API key to activate real-time Gemini models (<code>gemini-1.5-flash</code>).
+    </p>
+
+    <div class="form-group">
+      <label class="form-label">Google Gemini API Key</label>
+      <input type="password" class="form-input" id="gemini-api-key-input" placeholder="AIzaSy...">
+      <div class="text-dim" style="font-size: 0.75rem; margin-top: 0.35rem;">
+        Keys are stored locally in your browser's private storage and passed securely via request headers.
+      </div>
+    </div>
+
+    <div style="display: flex; justify-content: flex-end; gap: 0.75rem; margin-top: 1.5rem;">
+      <button class="btn btn-primary" id="btn-save-api-key">
+        Save & Apply
+      </button>
+    </div>
+  </div>
+</div>
+
+<!-- App Scripts -->
+<script src="/js/api.js"></script>
+<script src="/js/state.js"></script>
+<script src="/js/charts.js"></script>
+<script src="/js/dashboard.js"></script>
+<script src="/js/advisor.js"></script>
+<script src="/js/simulator.js"></script>
+<script src="/js/accounts.js"></script>
+<script src="/js/disputes.js"></script>
+<script src="/js/onboarding.js"></script>
+<script src="/js/app.js"></script>
+
+</body>
+</html>

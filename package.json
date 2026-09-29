@@ -1,0 +1,27 @@
+{
+  "name": "credit-assistant",
+  "version": "1.0.0",
+  "description": "AI-driven financial platform helping users in India understand, track, and improve their credit health",
+  "main": "server/index.js",
+  "scripts": {
+    "start": "node server/index.js",
+    "dev": "node --watch server/index.js"
+  },
+  "keywords": [
+    "credit-score",
+    "cibil",
+    "fintech",
+    "india",
+    "gemini-ai",
+    "dti",
+    "credit-utilization"
+  ],
+  "author": "Credit Assistant Team",
+  "license": "MIT",
+  "dependencies": {
+    "better-sqlite3": "^11.9.1",
+    "cors": "^2.8.5",
+    "dotenv": "^16.4.7",
+    "express": "^4.21.2"
+  }
+}
